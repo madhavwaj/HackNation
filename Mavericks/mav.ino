@@ -102,7 +102,15 @@ bool onPowerState(String deviceId, bool &state)
 
 void handleFlipSwitches() {
   unsigned long actualMillis = millis();                                          // get actual millis
- 
+  for (auto &flipSwitch : flipSwitches) {                                         // for each flipSwitch in flipSwitches map
+    unsigned long lastFlipSwitchChange = flipSwitch.second.lastFlipSwitchChange;  // get the timestamp when flipSwitch was pressed last time (used to debounce / limit events)
+
+    if (actualMillis - lastFlipSwitchChange > DEBOUNCE_TIME) {                    // if time is > debounce time...
+
+      int flipSwitchPIN = flipSwitch.first;                                       // get the flipSwitch pin from configuration
+      bool lastFlipSwitchState = flipSwitch.second.lastFlipSwitchState;           // get the lastFlipSwitchState
+      bool flipSwitchState = digitalRead(flipSwitchPIN);                          // read the current flipSwitch state
+      if (flipSwitchState != lastFlipSwitchState) {                               // if the flipSwitchState has changed...
 #ifdef TACTILE_BUTTON
         if (flipSwitchState) {                                                    // if the tactile button is pressed 
 #endif      
