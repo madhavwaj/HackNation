@@ -77,6 +77,35 @@ void setupRelays() {
   }
 }
 
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+const int buttonPin = 6;
+int buttonState = 0;
+
+void setup() {
+  lcd.begin(16, 2);
+  pinMode(buttonPin, INPUT);
+}
+
+void loop() {
+  buttonState = digitalRead(buttonPin);
+
+  if (buttonState == HIGH) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Button pressed!");
+    delay(1000);
+  } else {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Button not pressed");
+    delay(1000);
+  }
+}
+
+
 void setupFlipSwitches() {
   for (auto &device : devices)  {                     // for each device (relay / flipSwitch combination)
     flipSwitchConfig_t flipSwitchConfig;              // create a new flipSwitch configuration
